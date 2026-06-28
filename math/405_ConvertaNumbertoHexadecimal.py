@@ -6,15 +6,27 @@
 #
 # Input: num = -1
 # Output: "ffffffff"
+
 d = {10: "a", 11: "b", 12: "c", 13: "d", 14: "e", 15: "f"}
 
+
 def convert_to_hex(num: int) -> str:
-    if num < 16:
-        return d[num] if num in d else str(num)
-    res = num % 16
-    cur_char = d[res] if res in d else str(res)
-    cur_del = num // 16
-    return convert_to_hex(cur_del) + cur_char
+    num &= 0xFFFFFFFF
+
+    if num == 0:
+        return "0"
+
+    def helper(n: int) -> str:
+        if n < 16:
+            return d[n] if n in d else str(n)
+
+        res = n % 16
+        cur_char = d[res] if res in d else str(res)
+        cur_del = n // 16
+
+        return helper(cur_del) + cur_char
+
+    return helper(num)
 
 num = 422
 print(convert_to_hex(num))
